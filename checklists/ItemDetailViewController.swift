@@ -40,6 +40,8 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
             dueDate = item.dueDate
         }
         updateDueDateLabel()
+      
+        tableView.separatorColor = view.tintColor
         
     }
     

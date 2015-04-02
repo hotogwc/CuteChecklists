@@ -17,10 +17,12 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
   @IBOutlet var tableView: UITableView!
  
     var list: checklist!
+  var checkedItems = [ChecklistItem]()
+  var uncheckedItems = [ChecklistItem]()
 
   
+
   
-    
   
 
     override func viewDidLoad() {
@@ -28,6 +30,17 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
         title = list.name
       tableView.separatorColor = view.tintColor
       tableView.tableFooterView = UIView()
+      
+      for item in list.items as [ChecklistItem] {
+        if item.checked == true {
+          checkedItems.append(item)
+        } else {
+          uncheckedItems.append(item)
+        }
+      }
+      let cellNib = UINib(nibName: "CheckedCell", bundle: nil)
+      tableView.registerNib(cellNib, forCellReuseIdentifier: "CheckedCell")
+      
 
       
       
@@ -35,51 +48,106 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
         // Do any additional setup after loading the view, typically from a nib.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
   
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return list.items.count
-        
+    if section == 0 {
+      return list.items.count - list.checkedNum
+    } else {
+      return list.checkedNum
     }
+    
+        
+  }
+  
+  
+  
+  func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    return 2
+  }
+  
+  func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    if section == 0 {
+      return "未完成"
+    } else {
+      return "已完成"
+    }
+  }
   
  
     
   func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ChecklistItem") as UITableViewCell
-        
-        let label = cell.viewWithTag(1000) as UILabel
-        let item = list.items[indexPath.row]
-   
-        configureTextForCell(cell, withChecklistItem: item)
+    
+    
+    
+    if indexPath.section == 0 {
+      let cell = tableView.dequeueReusableCellWithIdentifier("ChecklistItem") as UITableViewCell
+      let item = uncheckedItems[indexPath.row]
+      
+      configureTextForCell(cell, withChecklistItem: item)
+      
+      return cell
+      
+      
+    } else {
+      let cell = tableView.dequeueReusableCellWithIdentifier("CheckedCell", forIndexPath: indexPath) as CheckedCell
+      let item = checkedItems[indexPath.row]
+      cell.configureCell(item)
+      cell.textLabel?.textColor = view.tintColor
+      return cell
+
+      
+    }
+
     
 
-        return cell
-    }
+
+  }
     
   func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        list.items.removeAtIndex(indexPath.row)
-        
-        let indexPaths = [indexPath]
-        tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
-        
+    var item = ChecklistItem()
+    if indexPath.section == 0 {
+      item = uncheckedItems[indexPath.row]
+      uncheckedItems.removeAtIndex(indexPath.row)
+    } else if indexPath.section == 1 {
+      item = checkedItems[indexPath.row]
+      checkedItems.removeAtIndex(indexPath.row)
     }
+    
+    if let index = find(list.items, item) {
+      list.items.removeAtIndex(index)
+    }
+    
+    
+      
+    let indexPaths = [indexPath]
+    tableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+        
+  }
     
     
   func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-      
-
-        let item = list.items[indexPath.row]
-        item.toggleChecked()
-        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
-
+    
+    var item = ChecklistItem()
+    if indexPath.section == 0 {
+      item = uncheckedItems[indexPath.row]
+      item.toggleChecked()
+      item.completionDate = NSDate()
+      uncheckedItems.removeAtIndex(indexPath.row)
+      checkedItems.append(item)
+  
+    } else {
+      item = checkedItems[indexPath.row]
+      item.toggleChecked()
+      checkedItems.removeAtIndex(indexPath.row)
+      uncheckedItems.append(item)
+    }
+    
+    tableView.reloadData()
     
         
-        
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    
+    tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
 
     }
@@ -89,16 +157,23 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
     func configureTextForCell(cell: UITableViewCell, withChecklistItem item: ChecklistItem) {
         let label = cell.viewWithTag(1000) as UILabel
         let font = UIFont(name: "DFWaWaSC-W5", size: 17.0)
-      if let font = font {
-        let attributes = [NSFontAttributeName:font]
-        let string = NSMutableAttributedString(string: item.text, attributes:attributes)
-        if item.checked == true {
-          string.addAttribute(NSStrikethroughStyleAttributeName, value:NSUnderlineStyle.StyleSingle.rawValue, range: NSMakeRange(0, string.length))
-        }
+        if let font = font {
+          let attributes = [NSFontAttributeName:font]
+          let string = NSMutableAttributedString(string: item.text, attributes:attributes)
+          if item.checked == true {
+            string.addAttribute(NSStrikethroughStyleAttributeName, value: NSUnderlineStyle.StyleSingle.rawValue, range: NSMakeRange(0, string.length))
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+          
+          
+          } else {
+            cell.accessoryType = UITableViewCellAccessoryType.DetailDisclosureButton
+          
+          }
+          
+          label.attributedText = string
         
-        label.attributedText = string
-      
-      }
+        
+        }
       
       
         label.textColor = view.tintColor
@@ -109,10 +184,11 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
     }
     
     func itemDetailViewController(controller: ItemDetailViewController, didFinishAddingItem item: ChecklistItem) {
-        let newRowIndex = list.items.count
+        let newRowIndex = uncheckedItems.count
+        uncheckedItems.append(item)
         list.items.append(item)
         
-      let indexPath = NSIndexPath(forRow: newRowIndex, inSection: item.checked ? 1 : 0)
+        let indexPath = NSIndexPath(forRow: newRowIndex, inSection: 0)
         let indexPaths = [indexPath]
         tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
         
@@ -121,14 +197,24 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
     }
     
     func itemDetailViewController(controller : ItemDetailViewController, didFinishEditingItem item: ChecklistItem) {
+      
+      if let index = find(uncheckedItems, item) {
+        let indexPath = NSIndexPath(forRow: index, inSection: 0)
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+          configureTextForCell(cell, withChecklistItem: item)
+        } else if let index = find(checkedItems, item) {
+          let indexPath = NSIndexPath(forRow: index, inSection: 1)
+          if let cell = tableView.cellForRowAtIndexPath(indexPath) as? CheckedCell {
+            cell.configureCell(item)
 
-        if let index = find(list.items, item) {
-            let indexPath = NSIndexPath(forRow: index, inSection: 0)
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-                configureTextForCell(cell , withChecklistItem: item)
-            }
+          }
         }
-        dismissViewControllerAnimated(true , completion: nil)
+        
+      }
+      
+      
+
+      dismissViewControllerAnimated(true , completion: nil)
         
     }
     
@@ -143,7 +229,11 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
             controller.delegate = self
             
             if let indexPath = tableView.indexPathForCell(sender as UITableViewCell) {
-                controller.ItemToEdit = list.items[indexPath.row]
+              if indexPath.section == 0 {
+                controller.ItemToEdit = uncheckedItems[indexPath.row]
+              } else if indexPath.section == 1{
+                controller.ItemToEdit = checkedItems[indexPath.row]
+              }
             }
            
             

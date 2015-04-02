@@ -12,8 +12,23 @@ class checklist: NSObject,NSCoding {
     var name = ""
     var iconName: String
     var items = [ChecklistItem]()
-
+  var checkedNum: Int {
+    get {
+      var checkedNum = 0
+      for item in items as [ChecklistItem] {
+        if item.checked ==  true {
+          checkedNum += 1
+        }
+      }
+      
+      return checkedNum
+    }
     
+  }
+  
+  
+
+  
     convenience init(name: String) {
         self.init(name: name, iconName: "No Icon")
     }
