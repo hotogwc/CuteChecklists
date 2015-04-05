@@ -19,6 +19,11 @@ class IconPickerViewController: UITableViewController {
   
     let iconscn = ["无图标","约会","生日","家务","聚会","文件夹","采购","收件箱","照片","旅行"]
   
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    tableView.separatorColor = view.tintColor
+  }
+  
   
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,6 +38,7 @@ class IconPickerViewController: UITableViewController {
         cell.textLabel?.font = UIFont(name: "DFWaWaSC-W5", size: 21.0)
         cell.textLabel?.text = iconName
         cell.imageView?.image = UIImage(named: iconImage)
+        cell.textLabel?.textColor = view.tintColor
         
         return cell
     }

@@ -22,6 +22,8 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
     @IBOutlet weak var DoneBarButton: UIBarButtonItem!
     @IBOutlet weak var shouldRemindSwith: UISwitch!
     @IBOutlet weak var dueDateLabel: UILabel!
+    @IBOutlet weak var textLabel1: UILabel!
+    @IBOutlet weak var textLabel2: UILabel!
     
     weak var delegate : ItemDetailViewControllerDelegate?
     
@@ -42,13 +44,29 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
         updateDueDateLabel()
       
         tableView.separatorColor = view.tintColor
+      setAppearance()
+      tableView.backgroundColor = UIColor.whiteColor()
         
     }
+  
+  func setAppearance() {
+    let fontName = "DFWaWaSC-W5"
+    TextField.font = UIFont(name: fontName, size: 17.0)
+    shouldRemindSwith.tintColor = view.tintColor
+    shouldRemindSwith.onTintColor = view.tintColor
+    dueDateLabel.font = UIFont(name: fontName, size: 14.0)
+    textLabel1.font = UIFont(name: fontName, size: 18.0)
+    textLabel2.font = UIFont(name: fontName, size: 18.0)
+    textLabel1.textColor = view.tintColor
+    textLabel2.textColor = view.tintColor
+    
+  }
     
     func updateDueDateLabel() {
         let formatter = NSDateFormatter()
         formatter.dateStyle = NSDateFormatterStyle.MediumStyle
         formatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        formatter.locale = NSLocale(localeIdentifier: "zh_CN")
         dueDateLabel.text = formatter.stringFromDate(dueDate)
     }
     
@@ -108,6 +126,7 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
                 
                 let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 0, width: 320, height: 216))
                 datePicker.tag = 100
+                datePicker.locale = NSLocale(localeIdentifier: "zh_CN")
                 cell.contentView.addSubview(datePicker)
                 
                 datePicker.addTarget(self, action: Selector("dateChanged:"), forControlEvents: UIControlEvents.ValueChanged)

@@ -22,6 +22,7 @@ protocol ListDetailViewControllerDelegate: class {
 class ListDetailViewController: UITableViewController,UITextFieldDelegate,IconPickerViewControllerDelegate {
     @IBOutlet weak var TextField: UITextField!
     @IBOutlet weak var DoneBarButton: UIBarButtonItem!
+  @IBOutlet weak var textLabel: UILabel!
     weak var delegate : ListDetailViewControllerDelegate?
     
     var checklistToEdit : checklist?
@@ -40,9 +41,22 @@ class ListDetailViewController: UITableViewController,UITextFieldDelegate,IconPi
             iconName = cl.iconName
         }
         iconImageView.image = UIImage(named: iconName)
-        
+        setAppearance()
+        tableView.separatorColor = view.tintColor
+        tableView.backgroundColor = UIColor.whiteColor()
     }
+  
+  func setAppearance() {
+    let fontName = "DFWaWaSC-W5"
+    TextField.font = UIFont(name: fontName, size: 17.0)
+
+    textLabel.font = UIFont(name: fontName, size: 18.0)
+
+    textLabel.textColor = view.tintColor
+
     
+  }
+  
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)

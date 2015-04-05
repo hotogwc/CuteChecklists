@@ -19,16 +19,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func customAppearance() {
     let titleFont = UIFont(name: "DFWaWaSC-W5", size: 21.0)
     let buttonFont = UIFont(name: "DFWaWaSC-W5", size: 18.0)
+    let color = window!.rootViewController?.view.tintColor
     if let titlefont  = titleFont {
       if let buttonfont = buttonFont {
-        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName:titlefont, NSForegroundColorAttributeName:UIColor.blackColor()]
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName:buttonfont, NSForegroundColorAttributeName:UIColor.blackColor()], forState: .Normal)
+        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName:titlefont, NSForegroundColorAttributeName:color! as UIColor]
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName:buttonfont, NSForegroundColorAttributeName:color! as UIColor], forState: UIControlState.Normal)
+          UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName:buttonfont, NSForegroundColorAttributeName:UIColor.grayColor()], forState: UIControlState.Disabled)
         
       }
 
     }
-    UINavigationBar.appearance().tintColor = UIColor.brownColor()
-    UINavigationBar.appearance().backgroundColor = UIColor.blackColor()
+    UINavigationBar.appearance().tintColor = window!.rootViewController?.view.tintColor
+    UINavigationBar.appearance().backgroundColor = UIColor.grayColor()
     window!.tintColor = UIColor.redColor()
     
     

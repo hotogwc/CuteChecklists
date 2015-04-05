@@ -18,8 +18,15 @@ class ChecklistItem: NSObject,NSCoding {
     var completionDate = NSDate()
     
     func toggleChecked(){
+      if checked == false {
         checked = !checked
+        removeNotificationForThisItem()
+        shouldRemind = false
+      } else {
+        checked = !checked
+      }
     }
+  
     
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeObject(text, forKey: "Text")
@@ -80,14 +87,19 @@ class ChecklistItem: NSObject,NSCoding {
     return nil
   }
   
-  deinit {
+  func removeNotificationForThisItem() {
     let existingNotification = notificationForThisItem()
     if let notification = existingNotification {
       println("Removing existing notification \(notification)")
       UIApplication.sharedApplication().cancelLocalNotification(notification)
     }
+    
   }
-
+  
+  deinit {
+    removeNotificationForThisItem()
+  }
+    
     
 }
 

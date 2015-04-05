@@ -13,6 +13,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
 
   
     var dataModel:DataModel!
+    var label = UILabel()
 
   
 
@@ -22,6 +23,8 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         navigationController?.delegate = self
         tableView.separatorColor = view.tintColor
         tableView.tableFooterView = UIView()
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        tableView.rowHeight = 50
       
       
         
@@ -31,12 +34,40 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
             let checklist = dataModel.lists[index]
             performSegueWithIdentifier("ShowChecklist", sender: checklist)
         }
+      setupFooterLabel()
+      updateFooterLabel()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
+  // setup footer label
+  
+  func setupFooterLabel() {
+    label.frame = CGRectMake(0, view.frame.size.height / 2, view.frame.size.width,50)
+    tableView.tableFooterView?.addSubview(label)
+    label.textAlignment = .Center
+    label.textColor = view.tintColor
+    let font = UIFont(name: "DFWaWaSC-W5", size: 19.0)
+    label.font = font!
+    
+  }
+  
+  func updateFooterLabel() {
+
+    
+    if dataModel.lists.count == 0 {
+      label.frame = CGRectMake(0, view.frame.size.height / 2, view.frame.size.width,50)
+      label.text = "还没有列表哦，点右上小加号添加一个吧"
+    } else {
+      
+      label.frame.origin = CGPoint.zeroPoint
+
+      label.text = "\(self.dataModel.lists.count)个列表"
+
+    }
+  }
 	
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -53,11 +84,14 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
             
         }
       
-      let image = UIImage(named: "Photos")
+      let image = UIImage(named: "160-1")
       let button = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
       let frame = CGRectMake(44.0, 44.0, image!.size.width, image!.size.height)
       button.frame = frame
       button.setBackgroundImage(image, forState: .Normal)
+
+      
+      
       button.backgroundColor = UIColor.clearColor()
       button.addTarget(self, action: Selector("accessoryTapped:event:"), forControlEvents: UIControlEvents.TouchUpInside)
       cell.accessoryView = button
@@ -67,6 +101,8 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         cell.accessoryType = UITableViewCellAccessoryType.DetailButton
         cell.textLabel?.font = UIFont(name: "DFWaWaSC-W5", size: 19.0)
         cell.detailTextLabel?.font = UIFont(name: "DFWaWaSC-W5", size: 11.0)
+        cell.textLabel?.textColor = view.tintColor
+        cell.detailTextLabel?.textColor = view.tintColor
        
         
         let count = checklist.countUncheckedItems()
@@ -79,6 +115,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         }
         
         cell.imageView?.image = UIImage(named: checklist.iconName)
+        updateFooterLabel()
         
         
         return cell
@@ -141,6 +178,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         
         let indexpaths = [indexPath]
         tableView.deleteRowsAtIndexPaths(indexpaths, withRowAnimation: UITableViewRowAnimation.Automatic)
+      updateFooterLabel()
         
     }
     
