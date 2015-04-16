@@ -84,8 +84,8 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
             
         }
       
-      let image = UIImage(named: "160-1")
-      let button = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+      let image = UIImage(named: "edit")
+      let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
       let frame = CGRectMake(44.0, 44.0, image!.size.width, image!.size.height)
       button.frame = frame
       button.setBackgroundImage(image, forState: .Normal)
@@ -123,7 +123,9 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
   
   func accessoryTapped(sender: AnyObject,event: AnyObject) {
     let touches = event.allTouches()
-    let touch = touches?.anyObject() as UITouch
+
+    let a = touches?.first
+    let touch = a as! UITouch
     let currentTouchPosion = touch.locationInView(tableView)
     let indexPath = tableView.indexPathForRowAtPoint(currentTouchPosion)
     if indexPath !=  nil {
@@ -142,11 +144,11 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "ShowChecklist" {
-            let vc = segue.destinationViewController as ChecklistsViewController
-            vc.list = sender as checklist
+            let vc = segue.destinationViewController as! ChecklistsViewController
+            vc.list = sender as! checklist
         } else if segue.identifier == "AddChecklist" {
-            let navigationcontroller = segue.destinationViewController as UINavigationController
-            let vc = navigationcontroller.topViewController as ListDetailViewController
+            let navigationcontroller = segue.destinationViewController as! UINavigationController
+            let vc = navigationcontroller.topViewController as! ListDetailViewController
             vc.checklistToEdit = nil
             vc.delegate = self
         }
@@ -183,8 +185,8 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
-        let navigationController = storyboard!.instantiateViewControllerWithIdentifier("ListNC") as UINavigationController
-        let vc = navigationController.topViewController as ListDetailViewController
+        let navigationController = storyboard!.instantiateViewControllerWithIdentifier("ListNC") as! UINavigationController
+        let vc = navigationController.topViewController as! ListDetailViewController
         
         vc.delegate = self
         let checklist = dataModel.lists[indexPath.row]

@@ -86,7 +86,7 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
         tableView.endUpdates()
         
         if let pickerCell = tableView.cellForRowAtIndexPath(indexDatePicker) {
-            let datePicker = pickerCell.viewWithTag(100) as UIDatePicker
+            let datePicker = pickerCell.viewWithTag(100) as! UIDatePicker
             datePicker.setDate(dueDate, animated: false)
         }
         

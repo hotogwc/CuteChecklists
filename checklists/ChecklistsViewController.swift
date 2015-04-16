@@ -156,13 +156,27 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
     
     
     if indexPath.section == 0 {
-      let cell = tableView.dequeueReusableCellWithIdentifier("ChecklistItem") as UITableViewCell
+      let cell = tableView.dequeueReusableCellWithIdentifier("ChecklistItem") as! UITableViewCell
       let clockView = UIImageView(frame: CGRectMake(2, 15, 20, 20))
       clockView.image = UIImage(named: "Appointments")
       cell.addSubview(clockView)
       let item = uncheckedItems[indexPath.row]
       clockView.tag = 100
       clockView.hidden = !item.shouldRemind
+      
+      let image = UIImage(named: "edit")
+      let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+      let frame = CGRectMake(44.0, 44.0, image!.size.width, image!.size.height)
+      button.frame = frame
+      button.setBackgroundImage(image, forState: .Normal)
+      
+      
+      
+      button.backgroundColor = UIColor.clearColor()
+      button.addTarget(self, action: Selector("accessoryTapped:event:"), forControlEvents: UIControlEvents.TouchUpInside)
+      cell.accessoryView = button
+      
+      
   
       
       configureTextForCell(cell, withChecklistItem: item)
@@ -172,7 +186,7 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
       
       
     } else {
-      let cell = tableView.dequeueReusableCellWithIdentifier("CheckedCell", forIndexPath: indexPath) as CheckedCell
+      let cell = tableView.dequeueReusableCellWithIdentifier("CheckedCell", forIndexPath: indexPath) as! CheckedCell
       let item = checkedItems[indexPath.row]
       cell.configureCell(item)
       cell.textLabel?.textColor = view.tintColor
@@ -186,6 +200,20 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
 
 
   }
+  
+  func accessoryTapped(sender: AnyObject,event: AnyObject) {
+    let touches = event.allTouches()
+    
+    let a = touches?.first
+    let touch = a as! UITouch
+    let currentTouchPosion = touch.locationInView(tableView)
+    let indexPath = tableView.indexPathForRowAtPoint(currentTouchPosion)
+    if indexPath !=  nil {
+      performSegueWithIdentifier("EditItem", sender: tableView.cellForRowAtIndexPath(indexPath!))
+    }
+    
+  }
+
     
   func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
     var item = ChecklistItem()
@@ -225,6 +253,7 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
       item.toggleChecked()
       checkedItems.removeAtIndex(indexPath.row)
       uncheckedItems.append(item)
+      item.shouldRemind = false
     }
     
     tableView.reloadData()
@@ -240,7 +269,7 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
 
     
     func configureTextForCell(cell: UITableViewCell, withChecklistItem item: ChecklistItem) {
-        let label = cell.viewWithTag(1000) as UILabel
+        let label = cell.viewWithTag(1000) as! UILabel
         let font = UIFont(name: "DFWaWaSC-W5", size: 19.0)
         if let font = font {
           let attributes = [NSFontAttributeName:font]
@@ -300,15 +329,15 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "AddItem" {
-            let navigationcontroller = segue.destinationViewController as UINavigationController
-            let controller = navigationcontroller.topViewController as ItemDetailViewController
+            let navigationcontroller = segue.destinationViewController as! UINavigationController
+            let controller = navigationcontroller.topViewController as! ItemDetailViewController
             controller.delegate = self
         } else if segue.identifier == "EditItem" {
-            let navigationcontroller = segue.destinationViewController as UINavigationController
-            let controller = navigationcontroller.topViewController as ItemDetailViewController
+            let navigationcontroller = segue.destinationViewController as! UINavigationController
+            let controller = navigationcontroller.topViewController as! ItemDetailViewController
             controller.delegate = self
             
-            if let indexPath = tableView.indexPathForCell(sender as UITableViewCell) {
+            if let indexPath = tableView.indexPathForCell(sender as! UITableViewCell) {
               if indexPath.section == 0 {
                 controller.ItemToEdit = uncheckedItems[indexPath.row]
               } else if indexPath.section == 1{

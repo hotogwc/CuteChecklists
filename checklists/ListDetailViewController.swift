@@ -110,7 +110,7 @@ class ListDetailViewController: UITableViewController,UITextFieldDelegate,IconPi
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "PickIcon" {
-            let vc = segue.destinationViewController as IconPickerViewController
+            let vc = segue.destinationViewController as! IconPickerViewController
             vc.delegate = self
             
         }

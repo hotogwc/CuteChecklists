@@ -40,8 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
       
         // Override point for customization after application launch.
-        let NavigationController = window!.rootViewController as UINavigationController
-        let vc = NavigationController.viewControllers[0] as AllListsViewController
+        let NavigationController = window!.rootViewController as! UINavigationController
+        let vc = NavigationController.viewControllers[0] as! AllListsViewController
         vc.dataModel = dataModel
         customAppearance()
         
