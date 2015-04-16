@@ -52,6 +52,7 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
   func setAppearance() {
     let fontName = "DFWaWaSC-W5"
     TextField.font = UIFont(name: fontName, size: 17.0)
+    TextField.textColor = view.tintColor
     shouldRemindSwith.tintColor = view.tintColor
     shouldRemindSwith.onTintColor = view.tintColor
     dueDateLabel.font = UIFont(name: fontName, size: 14.0)

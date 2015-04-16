@@ -49,6 +49,7 @@ class ListDetailViewController: UITableViewController,UITextFieldDelegate,IconPi
   func setAppearance() {
     let fontName = "DFWaWaSC-W5"
     TextField.font = UIFont(name: fontName, size: 17.0)
+    TextField.textColor = view.tintColor
 
     textLabel.font = UIFont(name: fontName, size: 18.0)
 
