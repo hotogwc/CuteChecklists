@@ -1,6 +1,7 @@
 #CuteChecklist
 
-Cute To-do APP which is built by Swift 1.2. Will add iTune's link when it's launched to App Store.
+Cute To-do APP which is built by Swift 1.2. 
+iTunes link:  https://itunes.apple.com/us/app/tuan-tuan-ti-xing/id982986488?l=zh&ls=1&mt=8
 
 #To-Do
 
