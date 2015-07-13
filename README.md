@@ -1,6 +1,6 @@
 #CuteChecklist
 
-Cute To-do APP which is built by Swift 1.2. 
+Cute To-do APP which is built by Swift 1.2.(updated to Swift 2.0 by far)
 iTunes link:  https://itunes.apple.com/us/app/tuan-tuan-ti-xing/id982986488?l=zh&ls=1&mt=8
 
 #To-Do
