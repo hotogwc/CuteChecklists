@@ -37,7 +37,7 @@ class ChecklistItem: NSObject,NSCoding {
         aCoder.encodeObject(completionDate, forKey: "completionDate")
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         text = aDecoder.decodeObjectForKey("Text") as! String
         checked = aDecoder.decodeBoolForKey("Checked")
         dueDate = aDecoder.decodeObjectForKey("DueDate") as! NSDate
@@ -57,7 +57,7 @@ class ChecklistItem: NSObject,NSCoding {
   func scheduleNotification() {
     let existingNotification = notificationForThisItem()
     if let notification = existingNotification {
-      println("Found an existing notification \(notification)")
+      print("Found an existing notification \(notification)")
       UIApplication.sharedApplication().cancelLocalNotification(notification)
     }
     
@@ -70,14 +70,14 @@ class ChecklistItem: NSObject,NSCoding {
       localNotification.userInfo = ["ItemID": itemID]
       
       UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
-      println("\(localNotification.userInfo)")
+      print("\(localNotification.userInfo)")
       
   
     }
   }
   
   func notificationForThisItem() -> UILocalNotification? {
-    let allNotifications = UIApplication.sharedApplication().scheduledLocalNotifications as! [UILocalNotification]
+    let allNotifications = UIApplication.sharedApplication().scheduledLocalNotifications!
     for notification in allNotifications {
       if let number = notification.userInfo?["ItemID"] as? NSNumber {
         if number.integerValue == itemID {
@@ -91,7 +91,7 @@ class ChecklistItem: NSObject,NSCoding {
   func removeNotificationForThisItem() {
     let existingNotification = notificationForThisItem()
     if let notification = existingNotification {
-      println("Removing existing notification \(notification)")
+      print("Removing existing notification \(notification)")
       UIApplication.sharedApplication().cancelLocalNotification(notification)
       
     }

@@ -156,16 +156,19 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
     
     
     if indexPath.section == 0 {
-      let cell = tableView.dequeueReusableCellWithIdentifier("ChecklistItem") as! UITableViewCell
+      let cell = tableView.dequeueReusableCellWithIdentifier("ChecklistItem")
+        
       let clockView = UIImageView(frame: CGRectMake(2, 15, 20, 20))
       clockView.image = UIImage(named: "Appointments")
-      cell.addSubview(clockView)
+      cell!.addSubview(clockView)
       let item = uncheckedItems[indexPath.row]
       clockView.tag = 100
       clockView.hidden = !item.shouldRemind
       
       let image = UIImage(named: "edit")
-      let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+      let button = UIButton(type: .Custom);
+        
+        
       let frame = CGRectMake(44.0, 44.0, image!.size.width, image!.size.height)
       button.frame = frame
       button.setBackgroundImage(image, forState: .Normal)
@@ -174,15 +177,15 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
       
       button.backgroundColor = UIColor.clearColor()
       button.addTarget(self, action: Selector("accessoryTapped:event:"), forControlEvents: UIControlEvents.TouchUpInside)
-      cell.accessoryView = button
+      cell!.accessoryView = button
       
       
   
       
-      configureTextForCell(cell, withChecklistItem: item)
+      configureTextForCell(cell!, withChecklistItem: item)
       updateFooterLabel()
       
-      return cell
+      return cell!
       
       
     } else {
@@ -205,8 +208,8 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
     let touches = event.allTouches()
     
     let a = touches?.first
-    let touch = a as! UITouch
-    let currentTouchPosion = touch.locationInView(tableView)
+    let touch = a
+    let currentTouchPosion = touch!.locationInView(tableView)
     let indexPath = tableView.indexPathForRowAtPoint(currentTouchPosion)
     if indexPath !=  nil {
       performSegueWithIdentifier("EditItem", sender: tableView.cellForRowAtIndexPath(indexPath!))
@@ -225,7 +228,7 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
       checkedItems.removeAtIndex(indexPath.row)
     }
     
-    if let index = find(list.items, item) {
+    if let index = list.items.indexOf(item) {
       list.items.removeAtIndex(index)
     }
     
@@ -306,12 +309,12 @@ class ChecklistsViewController: UIViewController,ItemDetailViewControllerDelegat
     
     func itemDetailViewController(controller : ItemDetailViewController, didFinishEditingItem item: ChecklistItem) {
       
-      if let index = find(uncheckedItems, item) {
+      if let index = uncheckedItems.indexOf(item) {
         let indexPath = NSIndexPath(forRow: index, inSection: 0)
         if let cell = tableView.cellForRowAtIndexPath(indexPath) {
           configureTextForCell(cell, withChecklistItem: item)
           cell.viewWithTag(100)?.hidden = !item.shouldRemind
-        } else if let index = find(checkedItems, item) {
+        } else if let index = checkedItems.indexOf(item) {
           let indexPath = NSIndexPath(forRow: index, inSection: 1)
           if let cell = tableView.cellForRowAtIndexPath(indexPath) as? CheckedCell {
             cell.configureCell(item)

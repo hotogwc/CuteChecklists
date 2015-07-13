@@ -77,15 +77,14 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellidentifier = "Cell"
-        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier(cellidentifier) as? UITableViewCell
-        
+        var cell : UITableViewCell! = tableView.dequeueReusableCellWithIdentifier(cellidentifier)
         if cell == nil {
             cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: cellidentifier)
             
         }
       
       let image = UIImage(named: "edit")
-      let button = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+      let button = UIButton(type: UIButtonType.Custom)
       let frame = CGRectMake(44.0, 44.0, image!.size.width, image!.size.height)
       button.frame = frame
       button.setBackgroundImage(image, forState: .Normal)
@@ -125,7 +124,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     let touches = event.allTouches()
 
     let a = touches?.first
-    let touch = a as! UITouch
+    let touch = a!
     let currentTouchPosion = touch.locationInView(tableView)
     let indexPath = tableView.indexPathForRowAtPoint(currentTouchPosion)
     if indexPath !=  nil {

@@ -199,6 +199,7 @@
 		72AD8E3A19FCA3280090C3CD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = wangchi;
 				TargetAttributes = {

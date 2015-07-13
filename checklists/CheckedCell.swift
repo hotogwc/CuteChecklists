@@ -12,7 +12,7 @@ class CheckedCell: UITableViewCell {
   
   lazy var formatter = NSDateFormatter()
   override func awakeFromNib() {
-    println("awakefromNib")
+    print("awakefromNib")
   }
   
   func configureCell(item: ChecklistItem) {

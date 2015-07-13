@@ -73,11 +73,11 @@ class ListDetailViewController: UITableViewController,UITextFieldDelegate,IconPi
     
     @IBAction func done(){
         if let ck = checklistToEdit {
-            ck.name = TextField.text
+            ck.name = TextField.text!
             ck.iconName = iconName
             delegate?.listDetailViewController(self, didFinishEditingChecklist: ck)
         } else {
-            let ck = checklist(name: TextField.text, iconName: iconName)
+            let ck = checklist(name: TextField.text!, iconName: iconName)
             delegate?.listDetailViewController(self, didFinishAddingChecklist: ck)
         }
         
@@ -92,7 +92,7 @@ class ListDetailViewController: UITableViewController,UITextFieldDelegate,IconPi
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let oldText: NSString = TextField.text
+        let oldText: NSString = TextField.text!
         let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
         if newText.length > 0 {
             DoneBarButton.enabled = true

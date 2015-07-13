@@ -119,8 +119,7 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.section == 1 && indexPath.row == 2 {
-            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("DatePickerCell") as? UITableViewCell
-            
+            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("DatePickerCell")
             if cell == nil {
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "DatePickerCell")
                 cell.selectionStyle = .None
@@ -189,7 +188,7 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
     @IBAction func shouldRemindToggled(sender: UISwitch) {
         TextField.resignFirstResponder()
         if sender.on {
-            let notificationSettings = UIUserNotificationSettings(forTypes: .Alert | .Sound, categories: nil)
+            let notificationSettings = UIUserNotificationSettings(forTypes: [.Alert, .Sound], categories: nil)
             
             UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
         }
@@ -201,7 +200,7 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
     
     @IBAction func done(){
         if let item = ItemToEdit {
-            item.text = TextField.text
+            item.text = TextField.text!
             item.shouldRemind = shouldRemindSwith.on
             item.dueDate = dueDate
             item.scheduleNotification()
@@ -209,7 +208,7 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
             delegate?.itemDetailViewController(self, didFinishEditingItem: item)
         } else {
             let item = ChecklistItem()
-            item.text = TextField.text
+            item.text = TextField.text!
             item.checked = false
             item.shouldRemind = shouldRemindSwith.on
             item.dueDate = dueDate
@@ -235,7 +234,7 @@ class ItemDetailViewController: UITableViewController,UITextFieldDelegate {
     
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let oldText: NSString = TextField.text
+        let oldText: NSString = TextField.text!
         let newText: NSString = oldText.stringByReplacingCharactersInRange(range, withString: string)
         if newText.length > 0 {
             DoneBarButton.enabled = true

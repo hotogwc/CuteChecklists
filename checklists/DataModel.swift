@@ -43,7 +43,7 @@ class DataModel {
     //save and load methods
     
     func documentsDirectory() -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true) as! [String]
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true) as [String]
         
         return paths[0]
     }
@@ -75,7 +75,7 @@ class DataModel {
     //sort method
     
     func sortChecklists() {
-        lists.sort({ checklist1, checklist2 in return
+        lists.sortInPlace({ checklist1, checklist2 in return
             checklist1.name.localizedStandardCompare(checklist2.name) == NSComparisonResult.OrderedAscending })
     }
     init() {
